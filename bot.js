@@ -9,6 +9,8 @@ class MyBot extends ActivityHandler {
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
         this.onMessage(async (context, next) => {
             console.log(context.activity.from);
+            await context.sendActivity(JSON.stringify(context.activity.channelData));
+            await context.sendActivity(JSON.stringify(context.activity.channelId));
             await context.sendActivity(JSON.stringify(context.activity.from));
             await context.sendActivity(`You said '${ context.activity.text }'`);
             // By calling next() you ensure that the next BotHandler is run.
