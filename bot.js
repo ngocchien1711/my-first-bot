@@ -16,7 +16,7 @@ class MyBot extends ActivityHandler {
         this.onMessage(async (context, next) => {
             // await context.sendActivity(JSON.stringify(context.activity.channelData));
             // await context.sendActivity(JSON.stringify(context.activity.channelId));
-            // await context.sendActivity(JSON.stringify(context.activity.from));
+            await context.sendActivity(JSON.stringify(context.activity.from));
             let answer = context.activity.text;
             answer = this.removeMentionTag(answer);
             // console.log("---"+answer+"----");
@@ -24,7 +24,7 @@ class MyBot extends ActivityHandler {
             if (answer.indexOf('merge') !== -1) {
                 if (answer.indexOf('Đồng ý') !== -1) {
                     let branchName = answer.substring(answer.lastIndexOf(' ') + 1, answer.length);
-                    await context.sendActivity(`Dạ vâng, để em merge '${branchName}'.`);
+                    await context.sendActivity(`Dạ vâng, để em merge '${branchName}'`);
                     const res = await fetch("http://13.75.70.159:8688/api/git/merge", {
                         method: 'POST',
                         body: JSON.stringify({
