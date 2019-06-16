@@ -75,7 +75,7 @@ server.post('/api/merge/request', async (req, res) => {
 server.post('/api/merge/done', async (req, res) => {
     for (let conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async turnContext => {
-            await turnContext.sendActivity(`Đã merge '${_.get(req.params, 'object_attributes.source_branch')}' xong. Kích hoạt build apps tự động lên 192.168.0.40`);
+            await turnContext.sendActivity(`Đã merge xong. Bắt đầu build apps tự động lên 192.168.0.40`);
         });
     }
     sendConfirm(res, `Merge done have been sent.`);
