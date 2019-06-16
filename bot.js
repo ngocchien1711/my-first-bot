@@ -17,11 +17,15 @@ class MyBot extends ActivityHandler {
         this.onMessage(async (context, next) => {
             // await context.sendActivity(JSON.stringify(context.activity.channelData));
             // await context.sendActivity(JSON.stringify(context.activity.channelId));
-            await context.sendActivity(JSON.stringify(context.activity.from));
             let answer = context.activity.text;
             answer = this.removeMentionTag(answer);
             // console.log("---"+answer+"----");
             // const validAnswers = ['Đồng ý', 'Từ chối'];
+            if (answer.includes("chào") || answer.includes("hello") || answer.includes("hi")
+            || answer.includes("Chào") || answer.includes("Hello") || answer.includes("Hi")) {
+                await context.sendActivity(`Chào ${context.activity.from.name}`);
+            }
+
             if (answer.indexOf('merge') !== -1) {
                 if (context.activity.from === ngocchienId) {
                     if (answer.indexOf('Đồng ý') !== -1) {
@@ -42,7 +46,7 @@ class MyBot extends ActivityHandler {
                         await context.sendActivity(`Yêu cầu merge bị từ chối mất rồi! Anh nào làm thì rebase lại đúng chuẩn nha.`);
                     }
                 } else {
-                    await context.sendActivity(`Xin đừng gào thét tên em làm chi, chỉ @Ngọc Chiến mới có quyền ra lệnh thui, hihi!`);
+                    await context.sendActivity(`Xin đừng gào thét tên em làm chi anh ${context.activity.from.name}, chỉ @Ngọc Chiến mới có quyền ra lệnh thui, hihi!`);
                 }
             }
             // await context.sendActivity(`You said '${ answer }'`);
