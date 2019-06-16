@@ -19,6 +19,7 @@ class MyBot extends ActivityHandler {
             // await context.sendActivity(JSON.stringify(context.activity.from));
             let answer = context.activity.text;
             answer = this.removeMentionTag(answer);
+            console.log("---"+answer+"----");
             const validAnswers = ['Đồng ý', 'Từ chối'];
             if (validAnswers.includes(answer)) {
                 if (answer === 'Đồng ý') {
@@ -58,7 +59,7 @@ class MyBot extends ActivityHandler {
     removeMentionTag(str) {
         if (str.indexOf('@') === 0) {
             var firstSpaceInx = str.indexOf(' ');
-            return str.substring(firstSpaceInx, str.length);
+            return str.substring(firstSpaceInx + 1, str.length);
         } else {
             return str;
         }
