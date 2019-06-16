@@ -28,7 +28,7 @@ class MyBot extends ActivityHandler {
                     await context.sendActivity(`Yêu cầu merge bị từ chối! Developer xin vui lòng rebase đúng chuẩn và tạo lại yêu cầu.`);
                 }
             }
-            await context.sendActivity(`You said '${ context.activity.text }'`);
+            await context.sendActivity(`You said '${ answer }'`);
             // By calling next() you ensure that the next BotHandler is run.
             await next();
         });
@@ -57,7 +57,7 @@ class MyBot extends ActivityHandler {
     }
 
     removeMentionTag(str) {
-        if (str.indexOf('@') === 0) {
+        if (str.indexOf('Puka') === 0) {
             var firstSpaceInx = str.indexOf(' ');
             return str.substring(firstSpaceInx + 1, str.length);
         } else {
