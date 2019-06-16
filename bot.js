@@ -23,7 +23,7 @@ class MyBot extends ActivityHandler {
             const validAnswers = ['Đồng ý', 'Từ chối'];
             if (validAnswers.includes(answer)) {
                 if (answer === 'Đồng ý') {
-                    await context.sendActivity(`Yêu cầu merge được chấp thuận, xin vui lòng chờ trong giây lát...`);
+                    await context.sendActivity(`Yêu cầu merge được chấp thuận, đang thực hiện merge ...`);
                 } else {
                     await context.sendActivity(`Yêu cầu merge bị từ chối! Developer xin vui lòng rebase đúng chuẩn và tạo lại yêu cầu.`);
                 }

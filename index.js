@@ -64,7 +64,7 @@ server.post('/api/messages', (req, res) => {
 server.post('/api/merge/request', async (req, res) => {
     for (let conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async turnContext => {
-            var question = MessageFactory.suggestedActions(['Đồng ý', 'Từ chối'], `@Ngọc Chiến có merge request từ ${req.params.user} tại nhánh ${req.params.branch}.`);
+            var question = MessageFactory.suggestedActions(['Đồng ý', 'Từ chối'], `@Ngọc Chiến có merge request từ ${req.params.user.username} tại nhánh ${req.params.object_attributes.source_branch}.`);
             await turnContext.sendActivity(question);
         });
     }
@@ -74,7 +74,7 @@ server.post('/api/merge/request', async (req, res) => {
 server.post('/api/merge/done', async (req, res) => {
     for (let conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async turnContext => {
-            await turnContext.sendActivity(`Đã merge nhánh '${req.params.from}' vào '${req.params.to}'. Bắt đầu kích hoạt build tự động lên 192.168.0.40.`);
+            await turnContext.sendActivity(`Đã merge nhánh '${req.params.from}' vào '${req.params.to}'. Kích hoạt build tự động lên 192.168.0.40`);
         });
     }
     sendConfirm(res, `Merge done have been sent.`);
