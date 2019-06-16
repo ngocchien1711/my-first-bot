@@ -18,8 +18,9 @@
     "dependencies": {
         "botbuilder": "~4.4.0",
         "dotenv": "^7.0.0",
-        "restify": "~8.2.0",
-        "lodash": "~4.17.11"
+        "lodash": "~4.17.11",
+        "node-fetch": "^2.6.0",
+        "restify": "~8.2.0"
     },
     "devDependencies": {
         "eslint": "^5.13.0",

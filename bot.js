@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 const { ActivityHandler, TurnContext, MessageFactory } = require('botbuilder');
-
+const fetch = require('node-fetch')
 class MyBot extends ActivityHandler {
     constructor(conversationReferences) {
         super();
@@ -24,9 +24,20 @@ class MyBot extends ActivityHandler {
             if (answer.indexOf('merge') !== -1) {
                 if (answer.indexOf('Đồng ý') !== -1) {
                     let branchName = answer.substring(answer.lastIndexOf(' '), answer.length);
-                    await context.sendActivity(`OK, Vậy tôi bắt đầu merge '${branchName}'.`);
+                    await context.sendActivity(`Dạ vâng, em sẽ merge '${branchName}'.`);
+                    const res = await fetch("http://13.75.70.159:8688/api/git/merge", {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            source: branchName,
+                            target: 'develop'
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    console.log(await res.json());
                 } else {
-                    await context.sendActivity(`Yêu cầu merge bị từ chối! Xin vui lòng rebase đúng chuẩn và tạo lại yêu cầu.`);
+                    await context.sendActivity(`Yêu cầu merge bị từ chối mất rồi! Anh nào làm thì rebase lại đúng chuẩn nha.`);
                 }
             }
             // await context.sendActivity(`You said '${ answer }'`);
