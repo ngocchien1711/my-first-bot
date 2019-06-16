@@ -19,7 +19,7 @@
         "botbuilder": "~4.4.0",
         "dotenv": "^7.0.0",
         "restify": "~8.2.0",
-        "lodash": "4.17.10"
+        "lodash": "~4.17.11"
     },
     "devDependencies": {
         "eslint": "^5.13.0",
