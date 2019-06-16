@@ -18,6 +18,7 @@ class MyBot extends ActivityHandler {
             // await context.sendActivity(JSON.stringify(context.activity.channelId));
             // await context.sendActivity(JSON.stringify(context.activity.from));
             const answer = context.activity.text;
+            answer = this.removeMentionTag(answer);
             const validAnswers = ['Đồng ý', 'Từ chối'];
             if (validAnswers.includes(answer)) {
                 if (answer === 'Đồng ý') {
@@ -52,6 +53,15 @@ class MyBot extends ActivityHandler {
     addConversationReference(activity) {
         const conversationReference = TurnContext.getConversationReference(activity);
         this.conversationReferences[conversationReference.conversation.id] = conversationReference;
+    }
+
+    removeMentionTag(str) {
+        if (str.indexOf('@') === 0) {
+            var firstSpaceInx = str.indexOf(' ');
+            return str.substring(firstSpaceInx, str.length);
+        } else {
+            return str;
+        }
     }
 }
 
