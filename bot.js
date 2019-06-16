@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 const { ActivityHandler, TurnContext, MessageFactory } = require('botbuilder');
-const fetch = require('node-fetch')
+const fetch = require('node-fetch');
+const ngocchienId = '29:1BrkZsEMyD_jiNg0Tg-PW7jTJg-3aFhPhQupCyGcir7U';
 class MyBot extends ActivityHandler {
     constructor(conversationReferences) {
         super();
@@ -22,22 +23,26 @@ class MyBot extends ActivityHandler {
             // console.log("---"+answer+"----");
             // const validAnswers = ['Đồng ý', 'Từ chối'];
             if (answer.indexOf('merge') !== -1) {
-                if (answer.indexOf('Đồng ý') !== -1) {
-                    let branchName = answer.substring(answer.lastIndexOf(' ') + 1, answer.length);
-                    await context.sendActivity(`Dạ vâng, để em merge '${branchName}'`);
-                    const res = await fetch("http://13.75.70.159:8688/api/git/merge", {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            source: branchName,
-                            target: 'develop'
-                        }),
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    console.log(await res.json());
+                if (context.activity.from === ngocchienId) {
+                    if (answer.indexOf('Đồng ý') !== -1) {
+                        let branchName = answer.substring(answer.lastIndexOf(' ') + 1, answer.length);
+                        await context.sendActivity(`Dạ vâng, để em merge '${branchName}'`);
+                        const res = await fetch("http://13.75.70.159:8688/api/git/merge", {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                source: branchName,
+                                target: 'develop'
+                            }),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        console.log(await res.json());
+                    } else {
+                        await context.sendActivity(`Yêu cầu merge bị từ chối mất rồi! Anh nào làm thì rebase lại đúng chuẩn nha.`);
+                    }
                 } else {
-                    await context.sendActivity(`Yêu cầu merge bị từ chối mất rồi! Anh nào làm thì rebase lại đúng chuẩn nha.`);
+                    await context.sendActivity(`Xin đừng gào thét tên em làm chi, chỉ @Ngọc Chiến mới có quyền ra lệnh thui, hihi!`);
                 }
             }
             // await context.sendActivity(`You said '${ answer }'`);
