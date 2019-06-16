@@ -19,16 +19,17 @@ class MyBot extends ActivityHandler {
             // await context.sendActivity(JSON.stringify(context.activity.from));
             let answer = context.activity.text;
             answer = this.removeMentionTag(answer);
-            console.log("---"+answer+"----");
-            const validAnswers = ['Đồng ý', 'Từ chối'];
-            if (validAnswers.includes(answer)) {
-                if (answer === 'Đồng ý') {
-                    await context.sendActivity(`Yêu cầu merge được chấp thuận, đang thực hiện merge ...`);
+            // console.log("---"+answer+"----");
+            // const validAnswers = ['Đồng ý', 'Từ chối'];
+            if (answer.indexOf('merge') !== -1) {
+                if (answer.indexOf('Đồng ý') !== -1) {
+                    let branchName = answer.substring(answer.lastIndexOf(' '), answer.length);
+                    await context.sendActivity(`OK, Vậy tôi bắt đầu merge '${branchName}'.`);
                 } else {
-                    await context.sendActivity(`Yêu cầu merge bị từ chối! Developer xin vui lòng rebase đúng chuẩn và tạo lại yêu cầu.`);
+                    await context.sendActivity(`Yêu cầu merge bị từ chối! Xin vui lòng rebase đúng chuẩn và tạo lại yêu cầu.`);
                 }
             }
-            await context.sendActivity(`You said '${ answer }'`);
+            // await context.sendActivity(`You said '${ answer }'`);
             // By calling next() you ensure that the next BotHandler is run.
             await next();
         });
