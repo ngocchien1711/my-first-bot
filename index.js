@@ -7,7 +7,7 @@ const restify = require('restify');
 
 // Import required bot services.
 // See https://aka.ms/bot-services to learn more about the different parts of a bot.
-const { BotFrameworkAdapter } = require('botbuilder');
+const { BotFrameworkAdapter, MessageFactory } = require('botbuilder');
 const builder = require('botbuilder');
 
 // This bot's main dialog.
@@ -19,6 +19,14 @@ dotenv.config({ path: ENV_FILE });
 
 // Create HTTP server
 const server = restify.createServer();
+server.use(restify.plugins.queryParser({
+    mapParams:true
+}));
+server.use(restify.plugins.bodyParser({
+    mapParams:true
+}));
+server.use(restify.plugins.acceptParser(server.acceptable));
+
 server.listen(process.env.port || process.env.PORT || 3978, () => {
     console.log(`\n${ server.name } listening to ${ server.url }`);
     console.log(`\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`);
@@ -53,19 +61,42 @@ server.post('/api/messages', (req, res) => {
     });
 });
 
-
-
-server.get('/api/notify', async (req, res) => {
+server.post('/api/merge/request', async (req, res) => {
     for (let conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async turnContext => {
-            await turnContext.sendActivity(`Conversation ID: `);
-            await turnContext.sendActivity(JSON.stringify(turnContext.activity.conversation));
-            await turnContext.sendActivity('proactive hello');
+            var question = MessageFactory.suggestedActions(['Đồng ý', 'Từ chối'], `@Ngọc Chiến có merge request từ ${req.params.user} tại nhánh ${req.params.branch}.`);
+            await turnContext.sendActivity(question);
         });
     }
+    sendConfirm(res, `Merge request have been sent.`)
+});
 
+server.post('/api/merge/done', async (req, res) => {
+    for (let conversationReference of Object.values(conversationReferences)) {
+        await adapter.continueConversation(conversationReference, async turnContext => {
+            await turnContext.sendActivity(`Đã merge nhánh '${req.params.from}' vào '${req.params.to}'. Bắt đầu kích hoạt build tự động lên 192.168.0.40.`);
+        });
+    }
+    sendConfirm(res, `Merge done have been sent.`);
+});
+
+server.post('/api/build/done', async (req, res) => {
+    for (let conversationReference of Object.values(conversationReferences)) {
+        await adapter.continueConversation(conversationReference, async turnContext => {
+            if (req.params.status === 'Success') {
+                await turnContext.sendActivity(`Build thành công tại commit ${req.params.lastCommit}`);
+            } else {
+                await turnContext.sendActivity(`Build không thành công tại commit ${req.params.lastCommit}. Vui lòng kiểm tra lại!`);
+            }
+        });
+    }
+    sendConfirm(res, `Build done have been sent.`);
+});
+
+
+function sendConfirm(res, msg) {
     res.setHeader('Content-Type', 'text/html');
     res.writeHead(200);
-    res.write('<html><body><h1>Proactive messages have been sent</h1></body></html>');
+    res.write(`<html><body><h1>${msg}</h1></body></html>`);
     res.end();
-});
+}

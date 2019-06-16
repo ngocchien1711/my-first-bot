@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-const { ActivityHandler, TurnContext } = require('botbuilder');
+const { ActivityHandler, TurnContext, MessageFactory } = require('botbuilder');
 
 class MyBot extends ActivityHandler {
     constructor(conversationReferences) {
@@ -17,6 +17,15 @@ class MyBot extends ActivityHandler {
             // await context.sendActivity(JSON.stringify(context.activity.channelData));
             // await context.sendActivity(JSON.stringify(context.activity.channelId));
             // await context.sendActivity(JSON.stringify(context.activity.from));
+            const answer = context.activity.text;
+            const validAnswers = ['Đồng ý', 'Từ chối'];
+            if (validAnswers.includes(answer)) {
+                if (answer === 'Đồng ý') {
+                    await context.sendActivity(`Yêu cầu merge được chấp thuận, xin vui lòng chờ trong giây lát...`);
+                } else {
+                    await context.sendActivity(`Yêu cầu merge bị từ chối! Developer xin vui lòng rebase đúng chuẩn và tạo lại yêu cầu.`);
+                }
+            }
             await context.sendActivity(`You said '${ context.activity.text }'`);
             // By calling next() you ensure that the next BotHandler is run.
             await next();
@@ -26,7 +35,7 @@ class MyBot extends ActivityHandler {
             const membersAdded = context.activity.membersAdded;
             for (let cnt = 0; cnt < membersAdded.length; ++cnt) {
                 if (membersAdded[cnt].id !== context.activity.recipient.id) {
-                    await context.sendActivity('Hello and welcome!');
+                    await context.sendActivity('Xin chào!');
                 }
             }
             // By calling next() you ensure that the next BotHandler is run.
@@ -34,7 +43,7 @@ class MyBot extends ActivityHandler {
         });
 
         this.onDialog(async (context, next) => {
-            await context.sendActivity(`I'm on Dialog`);
+            // await context.sendActivity(`I'm on Dialog`);
             // By calling next() you ensure that the next BotHandler is run.
             await next();
         });
@@ -42,7 +51,6 @@ class MyBot extends ActivityHandler {
 
     addConversationReference(activity) {
         const conversationReference = TurnContext.getConversationReference(activity);
-        console.log(conversationReference.conversation);
         this.conversationReferences[conversationReference.conversation.id] = conversationReference;
     }
 }
