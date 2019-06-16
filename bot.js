@@ -23,8 +23,8 @@ class MyBot extends ActivityHandler {
             // const validAnswers = ['Đồng ý', 'Từ chối'];
             if (answer.indexOf('merge') !== -1) {
                 if (answer.indexOf('Đồng ý') !== -1) {
-                    let branchName = answer.substring(answer.lastIndexOf(' '), answer.length);
-                    await context.sendActivity(`Dạ vâng, em sẽ merge '${branchName}'.`);
+                    let branchName = answer.substring(answer.lastIndexOf(' ') + 1, answer.length);
+                    await context.sendActivity(`Dạ vâng, để em merge '${branchName}'.`);
                     const res = await fetch("http://13.75.70.159:8688/api/git/merge", {
                         method: 'POST',
                         body: JSON.stringify({
