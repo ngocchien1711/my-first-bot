@@ -65,7 +65,7 @@ server.post('/api/messages', (req, res) => {
 server.post('/api/merge/request', async (req, res) => {
     for (let conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async turnContext => {
-            var question = MessageFactory.suggestedActions(['Đồng ý', 'Từ chối'], `@Ngọc Chiến có merge request từ ${_.get(req.params, 'user.username')} tại nhánh ${_.get(req.params, 'object_attributes.source_branch')}.`);
+            var question = MessageFactory.suggestedActions(['Đồng ý', 'Từ chối'], `@Ngọc Chiến: ${_.get(req.params, 'user.username')} yêu cầu merge nhánh '${_.get(req.params, 'object_attributes.source_branch')}'.`);
             await turnContext.sendActivity(question);
         });
     }
@@ -75,7 +75,7 @@ server.post('/api/merge/request', async (req, res) => {
 server.post('/api/merge/done', async (req, res) => {
     for (let conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async turnContext => {
-            await turnContext.sendActivity(`Đã merge nhánh '${_.get(req.params, 'from')}' vào '${_.get(req.params, 'to')}'. Kích hoạt build tự động lên 192.168.0.40`);
+            await turnContext.sendActivity(`Đã merge '${_.get(req.params, 'object_attributes.source_branch')}'. Kích hoạt build tự động lên 192.168.0.40`);
         });
     }
     sendConfirm(res, `Merge done have been sent.`);
@@ -85,9 +85,9 @@ server.post('/api/build/done', async (req, res) => {
     for (let conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async turnContext => {
             if (_.get(req.params, 'status') === 'Success') {
-                await turnContext.sendActivity(`Build thành công tại commit ${_.get(req.params,'lastCommit')}`);
+                await turnContext.sendActivity(`Build thành công tại commit ${_.get(req.params,'object_attributes.last_commit.message')}`);
             } else {
-                await turnContext.sendActivity(`Build không thành công tại commit ${_.get(req.params, 'lastCommit')}. Vui lòng kiểm tra lại!`);
+                await turnContext.sendActivity(`Build không thành công tại commit ${_.get(req.params,'object_attributes.last_commit.message')}. Vui lòng kiểm tra lại!`);
             }
         });
     }
