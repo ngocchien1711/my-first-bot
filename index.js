@@ -8,6 +8,7 @@ const restify = require('restify');
 // Import required bot services.
 // See https://aka.ms/bot-services to learn more about the different parts of a bot.
 const { BotFrameworkAdapter } = require('botbuilder');
+const builder = require('botbuilder');
 
 // This bot's main dialog.
 const { MyBot } = require('./bot');
@@ -41,7 +42,8 @@ adapter.onTurnError = async (context, error) => {
 };
 
 // Create the main dialog.
-const myBot = new MyBot();
+const conversationReferences = {};
+const myBot = new MyBot(conversationReferences);
 
 // Listen for incoming requests.
 server.post('/api/messages', (req, res) => {
@@ -49,4 +51,20 @@ server.post('/api/messages', (req, res) => {
         // Route to main dialog.
         await myBot.run(context);
     });
+});
+
+
+
+server.get('/api/notify', async (req, res) => {
+    for (let conversationReference of Object.values(conversationReferences)) {
+        await adapter.continueConversation(conversationReference, async turnContext => {
+            await turnContext.sendActivity(JSON.stringify(turnContext.activity.conversation));
+            await turnContext.sendActivity('proactive hello');
+        });
+    }
+
+    res.setHeader('Content-Type', 'text/html');
+    res.writeHead(200);
+    res.write('<html><body><h1>Proactive messages have been sent</h1></body></html>');
+    res.end();
 });
