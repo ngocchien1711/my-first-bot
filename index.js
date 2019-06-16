@@ -58,6 +58,7 @@ server.post('/api/messages', (req, res) => {
 server.get('/api/notify', async (req, res) => {
     for (let conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async turnContext => {
+            await turnContext.sendActivity(`Conversation ID: `);
             await turnContext.sendActivity(JSON.stringify(turnContext.activity.conversation));
             await turnContext.sendActivity('proactive hello');
         });
