@@ -46,7 +46,7 @@ adapter.onTurnError = async (context, error) => {
     // This check writes out errors to console log .vs. app insights.
     console.error(`\n [onTurnError]: ${ error }`);
     // Send a message to the user
-    await context.sendActivity(`Oops. Something went wrong!`);
+    await context.sendActivity(`Có lỗi đã xảy ra!`);
     await context.sendActivity(error);
 };
 
@@ -69,7 +69,7 @@ server.post('/api/merge/request', async (req, res) => {
             await turnContext.sendActivity(question);
         });
     }
-    sendConfirm(res, `Merge request have been sent.`)
+    sendConfirm(res, `Đã gửi merge request`)
 });
 
 server.post('/api/merge/done', async (req, res) => {
@@ -78,20 +78,20 @@ server.post('/api/merge/done', async (req, res) => {
             await turnContext.sendActivity(`Đã merge xong. Bắt đầu build apps tự động lên 192.168.0.40`);
         });
     }
-    sendConfirm(res, `Merge done have been sent.`);
+    sendConfirm(res, `Đã gửi merge done`);
 });
 
 server.post('/api/build/done', async (req, res) => {
     for (let conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async turnContext => {
             if (_.get(req.params, 'status') === 'Success') {
-                await turnContext.sendActivity(`Build thành công tại commit ${_.get(req.params,'object_attributes.last_commit.message')}`);
+                await turnContext.sendActivity(`Build thành công tại.`);
             } else {
-                await turnContext.sendActivity(`Build không thành công tại commit ${_.get(req.params,'object_attributes.last_commit.message')}. Vui lòng kiểm tra lại!`);
+                await turnContext.sendActivity(`Build không thành công. Vui lòng kiểm tra lại!`);
             }
         });
     }
-    sendConfirm(res, `Build done have been sent.`);
+    sendConfirm(res, `Đã gửi build done`);
 });
 
 

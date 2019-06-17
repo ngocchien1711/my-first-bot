@@ -17,11 +17,9 @@ class MyBot extends ActivityHandler {
         this.onMessage(async (context, next) => {
             // await context.sendActivity(JSON.stringify(context.activity.channelData));
             // await context.sendActivity(JSON.stringify(context.activity.channelId));
-            await context.sendActivity(JSON.stringify(context.activity.from));
+            // await context.sendActivity(JSON.stringify(context.activity.from));
             let answer = context.activity.text;
             answer = this.removeMentionTag(answer);
-            // console.log("---"+answer+"----");
-            // const validAnswers = ['Đồng ý', 'Từ chối'];
             if (answer.includes("chào") || answer.includes("hello") || answer.includes("hi")
             || answer.includes("Chào") || answer.includes("Hello") || answer.includes("Hi")) {
                 await context.sendActivity(`Chào ${context.activity.from.name}`);
