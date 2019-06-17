@@ -17,6 +17,7 @@ class MyBot extends ActivityHandler {
         this.onMessage(async (context, next) => {
             // await context.sendActivity(JSON.stringify(context.activity.channelData));
             // await context.sendActivity(JSON.stringify(context.activity.channelId));
+            await context.sendActivity(JSON.stringify(context.activity.from));
             let answer = context.activity.text;
             answer = this.removeMentionTag(answer);
             // console.log("---"+answer+"----");
