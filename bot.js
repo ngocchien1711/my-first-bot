@@ -45,7 +45,7 @@ class MyBot extends ActivityHandler {
                         await context.sendActivity(`Yêu cầu merge bị từ chối mất rồi! Anh nào làm thì rebase lại đúng chuẩn nha.`);
                     }
                 } else {
-                    await context.sendActivity(`Xin đừng gào thét tên em làm chi anh ${context.activity.from.name}, chỉ @Ngọc Chiến mới có quyền ra lệnh thui, hihi!`);
+                    await context.sendActivity(`Em chỉ nhận lệnh từ @Ngọc Chiến thui, 401 Unauthorized nha anh ${context.activity.from.name}, hé he hè!`);
                 }
             }
             // await context.sendActivity(`You said '${ answer }'`);
