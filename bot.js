@@ -28,7 +28,7 @@ class MyBot extends ActivityHandler {
             }
 
             if (answer.indexOf('merge') !== -1) {
-                if (context.activity.from === ngocchienId) {
+                if (context.activity.from.id === ngocchienId) {
                     if (answer.indexOf('Đồng ý') !== -1) {
                         let branchName = answer.substring(answer.lastIndexOf(' ') + 1, answer.length);
                         await context.sendActivity(`Dạ vâng, để em merge '${branchName}'`);
