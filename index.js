@@ -65,7 +65,7 @@ server.post('/api/messages', (req, res) => {
 server.post('/api/merge/request', async (req, res) => {
     for (let conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async turnContext => {
-            var question = MessageFactory.suggestedActions([`Đồng ý merge ${_.get(req.params, 'object_attributes.source_branch')}`, `Từ chối`], `@Ngọc Chiến: ${_.get(req.params, 'user.username')} yêu cầu merge nhánh '${_.get(req.params, 'object_attributes.source_branch')}'.`);
+            var question = MessageFactory.suggestedActions([`Đồng ý merge ${_.get(req.params, 'object_attributes.source_branch')}`, `Từ chối`], `@Ngọc Chiến: ${_.get(req.params, 'user.name')} yêu cầu merge nhánh '${_.get(req.params, 'object_attributes.source_branch')}'.`);
             await turnContext.sendActivity(question);
         });
     }
@@ -85,7 +85,7 @@ server.post('/api/build/done', async (req, res) => {
     for (let conversationReference of Object.values(conversationReferences)) {
         await adapter.continueConversation(conversationReference, async turnContext => {
             if (_.get(req.params, 'status') === 'Success') {
-                await turnContext.sendActivity(`Build thành công tại.`);
+                await turnContext.sendActivity(`Build thành công.`);
             } else {
                 await turnContext.sendActivity(`Build không thành công. Vui lòng kiểm tra lại!`);
             }
